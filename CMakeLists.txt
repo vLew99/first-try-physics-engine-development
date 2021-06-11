@@ -6,6 +6,7 @@ add_executable(
 	src/main.c
 	src/collision.c
 	src/utils.c
+	src/vector_funcs.c
 )
 
 target_include_directories(

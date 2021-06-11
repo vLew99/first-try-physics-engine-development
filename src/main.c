@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "types.h"
 #include "collision.h"
+#include "vector_funcs.h"
+
 
 // point to point collision testing
 void fun1() {
@@ -82,17 +85,46 @@ void fun7() {
 	printf("%f\n", deg);
 }
 
+void fun8() {
+	Vector2 a = {1, 2};
+	Vector2 b = {2, 1};
+	Vector2* y = Add1(&a, &b);
+
+	free(y);
+
+	printf("%f - %f\n", y->x, y->y);
+	Vector2 p1 = Add2(&a, &b);
+	printf("%f - %f\n", p1.x, p1.y);
+
+	Vector2 p2 = Subtract(&a, &b);
+	printf("%f - %f\n", p2.x, p2.y);
+
+	printf("Norm : %f\n", Norm(&p1));
+	printf("Norm : %f\n", Norm(&p2));
+	printf("Dot: %f\n", Dot(&p1, &p2));
+
+	Vector2 u1 = Normalize(&p1);
+
+	printf("Normalize: (%f, %f)\n", u1.x , u1.y);
+
+
+}
 
 int main() {
 
-	fun7();
+	fun8();
 
-	fun1();
-	fun2();
-	fun3();
-	fun4();
-	fun5();
-	fun6();
+	// fun7();
+
+	// fun1();
+	// fun2();
+	// fun3();
+	// fun4();
+	// fun5();
+	// fun6();
+	// 
+	
+
 
 	// int a = 50;
 	// double value = *(double *)&a;
