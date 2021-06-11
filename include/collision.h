@@ -18,6 +18,6 @@ bool CheckCircleLineCollision( const Vector3*, const Vector4* );
 bool CheckRectRectCollision( const Vector4*, const Vector4* );
 bool CheckRectLineCollision( const Vector4*, const Vector4* );
 
-bool CheckLineLineCollision( const Vector4*, const Vector4* );
+bool CheckLineLineCollision( const Vector2* , const Vector2* , const Vector2* ,const Vector2*);
 
 #endif

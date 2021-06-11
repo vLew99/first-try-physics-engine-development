@@ -110,9 +110,17 @@ void fun8() {
 
 }
 
+void fun9() {
+	Line2D a = {1, 2, 6, 2};
+	Line2D b = {3, 5, 2, 5};
+
+	printf("Are these lines colliding : %d\n", CheckLineLineCollision(&a.a, &a.b, &b.a, &b.b));
+}
+
+
 int main() {
 
-	fun8();
+	fun9();
 
 	// fun7();
 

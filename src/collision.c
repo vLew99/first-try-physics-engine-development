@@ -100,3 +100,31 @@ bool CheckCircleLineCollision(const Vector3* c, const Vector4* l) {
 bool CheckRectRectCollision(const Vector4* a, const Vector4* b) {
 	return !(a->x1 > b->x2 || a->x2 < b->x1 || a->y1 < b->y2 || a->y2 > b->y1);
 }
+
+
+
+
+// LINE COLLISIONS
+bool CheckLineLineCollision( const Vector2* p1, const Vector2* p2, const Vector2* p3, const Vector2* p4)
+{
+	real_t x1 = p1->x;
+	real_t y1 = p1->y;
+	real_t x2 =	p2->x;
+	real_t y2 = p2->y;
+	
+	real_t x3 = p3->x;
+	real_t y3 = p3->y;
+	real_t x4 = p4->x;
+	real_t y4 = p4->y;
+
+	real_t d = (y4-y3)*(x2-x1) - (x4-x3)*(y2-y1);
+	if(d==0)
+		return false;
+
+	real_t u1 = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3))/d;
+	real_t u2 = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3))/d;
+
+	if(0 <= u1 && u1 <= 1 && 0 <= u2 && u2 <= 1)
+		return true;
+	return false;
+}
