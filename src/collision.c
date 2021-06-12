@@ -1,6 +1,7 @@
 #include "collision.h"
 
 #include <math.h>
+#include <stdio.h>
 #include "defs.h"
 #include "utils.h"
 
@@ -17,8 +18,8 @@ bool CheckPointCircleCollision(const Vector2* a, const Vector3* b) {
 }
 
 
-bool CheckPointRectCollision(const Vector2* a, const Vector4* b) {
-	return a->x >= b->x1 && a->x <= b->x2 && a->y >= b->y1 && a->y <= b->y2; 
+bool CheckPointRectCollision(const Vector2* a, const Vector2* rp1, const Vector2* rp3) {
+	return a->x >= rp1->x && a->x <= rp3->x && a->y <= rp1->y && a->y >= rp3->y; 
 }
 
 
@@ -101,6 +102,23 @@ bool CheckRectRectCollision(const Vector4* a, const Vector4* b) {
 	return !(a->x1 > b->x2 || a->x2 < b->x1 || a->y1 < b->y2 || a->y2 > b->y1);
 }
 
+
+bool CheckRectLineCollision(const Vector2* rp1, const Vector2* rp2, const Vector2* rp3, const Vector2* rp4, const Vector2* lp1, const Vector2* lp2) {
+	
+	if(CheckPointRectCollision(lp1, rp1, rp3) || CheckPointRectCollision(lp2, rp1, rp3))
+		return true;
+
+	bool left, right, top, bottom;
+	top = CheckLineLineCollision(rp1, rp2, lp1, lp2);
+	right = CheckLineLineCollision(rp2, rp3, lp1, lp2);
+	bottom = CheckLineLineCollision(rp3, rp4, lp1, lp2);
+	left = CheckLineLineCollision(rp4, rp1, lp1, lp2);
+
+	if(top || right || bottom || left)
+		return true;
+
+	return false;
+}
 
 
 
