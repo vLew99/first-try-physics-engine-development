@@ -146,3 +146,10 @@ bool CheckLineLineCollision( const Vector2* p1, const Vector2* p2, const Vector2
 		return true;
 	return false;
 }
+
+
+
+// POLYGON COLLISIONS
+bool CheckPolyPointCollision(const Polygon2D* p, const Vector2* a) {
+	  
+}

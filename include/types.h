@@ -1,6 +1,8 @@
 #ifndef TYPES_HEADER
 #define TYPES_HEADER
 
+
+
 #ifdef USE_DOUBLE
 	typedef double real_t;
 #else
@@ -8,13 +10,13 @@
 #endif
 
 
+
 typedef struct {
 	real_t x, y;
 } Vector2, Point2D;
 
 
-typedef struct
-{
+typedef struct {
 	union {
 		struct { real_t x, y, z; }; 					// (x, y, z)
 		struct { Vector2 center; real_t radius; };				// Vector2 c, real_t r
@@ -48,5 +50,13 @@ typedef struct {
 		struct { Vector2 a, b, c; };
 	};
 } Triangle;
+
+
+typedef struct {
+	unsigned int count;
+	Point2D* points;
+} Polygon2D;
+
+
 
 #endif
