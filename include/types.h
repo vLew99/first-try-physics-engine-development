@@ -2,7 +2,6 @@
 #define TYPES_HEADER
 
 
-
 #ifdef USE_DOUBLE
 	typedef double real_t;
 #else
@@ -50,12 +49,6 @@ typedef struct {
 		struct { Vector2 a, b, c; };
 	};
 } Triangle;
-
-
-typedef struct {
-	unsigned int count;
-	Point2D* points;
-} Polygon2D;
 
 
 

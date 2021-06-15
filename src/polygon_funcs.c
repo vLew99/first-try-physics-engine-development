@@ -14,46 +14,71 @@ Polygon2D CreatePolygon(const unsigned int count) {
 	return p;
 }
 
+// Rect2D GetBoundingBox(const Polygon2D* p) {
+// 	if(p->count == 0 || p->points == NULL)
+// 		return (Rect2D){0,0,0,0};
+
+// 	real_t minx, miny, maxx, maxy;
+// 	minx = maxx = p->points[0].x;
+// 	miny = maxy = p->points[0].y;
+
+// 	Vector2 temp;
+	
+// 	for(size_t i = 1; i < p->count; i++) {
+// 		temp = p->points[i];
+// 		if( temp.x < minx)
+// 			minx = temp.x;
+// 		else if(temp.x > maxx)
+// 			maxx = temp.x;
+// 		if(temp.y < miny)
+// 			miny = temp.y;
+// 		else if(temp.y > maxy)
+// 			maxy = temp.y;
+// 	}
+
+// 	Rect2D r = {minx, miny, maxx, maxy};
+// 	return r;
+// }
+
+
+
+// linked_list function
 Rect2D GetBoundingBox(const Polygon2D* p) {
 	if(p->count == 0 || p->points == NULL)
 		return (Rect2D){0,0,0,0};
 
 	real_t minx, miny, maxx, maxy;
-	minx = maxx = p->points[0].x;
-	miny = maxy = p->points[0].y;
 
-	Vector2 temp;
-	
-	for(size_t i = 1; i < p->count; i++) {
-		temp = p->points[i];
-		if( temp.x < minx)
-			minx = temp.x;
-		else if(temp.x > maxx)
-			maxx = temp.x;
-		if(temp.y < miny)
-			miny = temp.y;
-		else if(temp.y > maxy)
-			maxy = temp.y;
+	// first node
+	minx = maxx = (p->points)->data.x;
+	miny = maxy = (p->points)->data.y;
+
+	Vec2_LL_node* trav = (p->points)->right; // traversal node
+	while(trav!=NULL) {
+		if( trav->data.x < minx)
+			minx = trav->data.x;
+		else if(trav->data.x > maxx)
+			maxx = trav->data.x;
+		if(trav->data.y < miny)
+			miny = trav->data.y;
+		else if(trav->data.y > maxy)
+			maxy = trav->data.y;
+		trav = trav->right; // next node
 	}
 
 	Rect2D r = {minx, miny, maxx, maxy};
 	return r;
-
 }
 
 void PrintPolygon(const Polygon2D* p) {
-	for(size_t i = 0; i< p->count; i++) {
-		printf("(%f, %f)\n", p->points[i].x, p->points[i].y);
-	}
+	LL_PrintForward(p->points);
 }
 
 
 void AddVertex(Polygon2D * p, const Point2D* cord, const unsigned int position) {
-	if(position >= 0 && position < p->count) {
-		p->points[position] = *cord;
-	}
+	LL_Insert(&p->points, *cord);
 }
 
 void RemovePolygon(Polygon2D* p) {
-	free(p->points);
+	LL_DeleteLL(p->points);
 }

@@ -9,8 +9,7 @@
 
 
 
-void LL_TraverseForw(Vec2_LL_node** list) {
-	Vec2_LL_node* trav = *list;
+void LL_PrintForward(const Vec2_LL_node* trav) {
 	while(trav != NULL) {
 		printf("(%p,(%f, %f),%p)->\n", trav->left, trav->data.x, trav->data.y, trav->right);
 		trav = trav->right;
@@ -18,8 +17,7 @@ void LL_TraverseForw(Vec2_LL_node** list) {
 	printf("\n");
 }
 
-void LL_TraverseBack(Vec2_LL_node** list) {
-	Vec2_LL_node* trav = *list;
+void LL_PrintBackward(const Vec2_LL_node* trav) {
 	while(trav != NULL) {
 		printf("(%p,(%f, %f),%p)->\n", trav->left, trav->data.x, trav->data.y, trav->right);
 		trav = trav->left;
@@ -87,6 +85,19 @@ void LL_Delete(Vec2_LL_node** list, const Vector2 item) {
 		temp = temp->right;
 	}
 }
+
+
+void LL_DeleteLL(Vec2_LL_node* list) {
+	Vec2_LL_node* trav = list; // traversal node
+	while(trav!= NULL) {
+		trav = list->right;
+		free(list);
+		list = trav;
+	}
+}
+
+
+
 
 unsigned int LL_GetCount(const Vec2_LL_node* list) {
 	unsigned int count = 0;

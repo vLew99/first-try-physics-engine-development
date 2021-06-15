@@ -1,7 +1,14 @@
 #ifndef POLYGON_FUNCS_HEADER
 #define POLYGON_FUNCS_HEADER
 
+#include "data_structures/linked_list.h"
 #include "types.h"
+
+
+typedef struct {
+	unsigned int count;
+	Vec2_LL_node* points;
+} Polygon2D;
 
 
 void PrintPolygon(const Polygon2D* polygon);

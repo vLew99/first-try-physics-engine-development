@@ -3,14 +3,14 @@ project(Collision LANGUAGES C)
 
 add_executable(
 	${PROJECT_NAME}
-	# src/main.c
+	src/main.c
 	src/collision.c
 	src/utils.c
 	src/vector_funcs.c
 	src/polygon_funcs.c
 	src/dynamics.c
 	src/data_structures/linked_list.c
-	tests/Vec2_LL.c
+	# tests/Vec2_LL.c
 )
 
 target_include_directories(
