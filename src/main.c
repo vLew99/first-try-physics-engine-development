@@ -130,70 +130,13 @@
 
 // }
 
-void fun11() {
-	Polygon2D x = CreatePolygon(3);
-	PrintPolygon(&x);
-	Vector2 a = {1, 2};
-	Vector2 b = (Vector2){1.5, 3};
-	Vector2 c = (Vector2){2, 2};
-
-	AddVertex(&x, &a, 0);
-	AddVertex(&x, &b, 1);
-	AddVertex(&x, &c, 2);
-	PrintPolygon(&x);
-	Rect2D bb = GetBoundingBox(&x);
-	printf("--%f--%f--%f--%f--\n", bb.x1, bb.y1, bb.x2, bb.y2);
-	RemovePolygon(&x);
-}
-
-void fun12() {
-
-	Polygon2D x = CreatePolygon(5);
-	PrintPolygon(&x);
-	Vector2 a = {2, 4};
-	Vector2 b = (Vector2){3, 1};
-	Vector2 c = (Vector2){5, 4};
-	Vector2 d = {4, 6};
-	Vector2 e = {3, 7};
-
-	AddVertex(&x, &a, 0);
-	AddVertex(&x, &b, 1);
-	AddVertex(&x, &c, 2);
-	AddVertex(&x, &d, 3);
-	AddVertex(&x, &e, 4);
-
-	PrintPolygon(&x);
-	
-	Rect2D bb = GetBoundingBox(&x);
-	int v = bb.x1;
-	assert(bb.x1 == 2.0f);
-	assert(bb.y1 == 1.0f);
-	assert(bb.x2 == 5.0f);
-	assert(bb.y2 == 7.0f);
-	printf("--%f--%f--%f--%f--\n", bb.x1, bb.y1, bb.x2, bb.y2);
-	RemovePolygon(&x);
-
-}
 
 
-void AddForceTest() {
-	Object2D player;
-	player.cforce = 0;
-	player.force_list = malloc(sizeof(Vector2)*10);
-	AddForce(&player, (Vector2){ 1.0f, 2.2f });
-	AddForce(&player, (Vector2){ 0.0f, 0.2f });
-	AddForce(&player, (Vector2){ 0.0f, 0.0f });
 
-	for(int i=0; i< player.cforce ; i++) {
-		printf("(%f, %f)\n", player.force_list[i].x, player.force_list[i].y);
-	}
 
-	free(player.	force_list);
-}
 
 int main() {
 
-	AddForceTest();
 
 	// fun7();
 

@@ -2,22 +2,21 @@
 #define DYNAMICS_HEADER
 
 #include "types.h"
+#include "data_structures/linked_list.h"
 
 #include <stdint.h>
-
-#define MAX_FORCES 100
-#define MAX_IMPLUSES 100
 
 typedef struct {
 	real_t mass;
 	Vector2 pos;
 	Vector2 vel;
-	Vector2* force_list;
-	uint8_t cforce;
-	Vector2* impluse_list;
-	uint8_t cimpulse;
+	LL_Vector2 force_list;
+	LL_Vector2 impulse_list;
 } Object2D;
 
+
+Object2D* CreateObject2D(const real_t mass, const Vector2 pos, const Vector2 vel);
+void DeleteObject2D(Object2D* obj);
 
 void AddForce(Object2D* object, const Vector2 force);
 void RemoveForce(Object2D* object, const Vector2 force);
