@@ -1,0 +1,2 @@
+1. Rework names for Vec2_LL everything
+2. Look how to implement templates in c

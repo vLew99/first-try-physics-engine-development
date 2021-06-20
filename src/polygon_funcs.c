@@ -6,13 +6,12 @@
 #include "types.h"
 
 
-
-Polygon2D CreatePolygon(const unsigned int count) {
-	Polygon2D p;
-	p.count = count;
-	p.points = malloc(sizeof(Point2D) * count);
-	return p;
-}
+// Polygon2D CreatePolygon(const unsigned int count) {
+// 	Polygon2D p;
+// 	p.count = count;
+// 	p.points = malloc(sizeof(Point2D) * count);
+// 	return p;
+// }
 
 // Rect2D GetBoundingBox(const Polygon2D* p) {
 // 	if(p->count == 0 || p->points == NULL)
@@ -43,42 +42,42 @@ Polygon2D CreatePolygon(const unsigned int count) {
 
 
 // linked_list function
-Rect2D GetBoundingBox(const Polygon2D* p) {
-	if(p->count == 0 || p->points == NULL)
-		return (Rect2D){0,0,0,0};
+// Rect2D GetBoundingBox(const Polygon2D* p) {
+// 	if(p->count == 0 || p->points->head == NULL)
+// 		return (Rect2D){0,0,0,0};
 
-	real_t minx, miny, maxx, maxy;
+// 	real_t minx, miny, maxx, maxy;
 
-	// first node
-	minx = maxx = (p->points)->data.x;
-	miny = maxy = (p->points)->data.y;
+// 	// first node
+// 	minx = maxx = (p->points)->head->data.x;
+// 	miny = maxy = (p->points)->head->data.y;
 
-	Vec2_LL_node* trav = (p->points)->right; // traversal node
-	while(trav!=NULL) {
-		if( trav->data.x < minx)
-			minx = trav->data.x;
-		else if(trav->data.x > maxx)
-			maxx = trav->data.x;
-		if(trav->data.y < miny)
-			miny = trav->data.y;
-		else if(trav->data.y > maxy)
-			maxy = trav->data.y;
-		trav = trav->right; // next node
-	}
+// 	Vec2_LL_node* trav = (p->points)->head->next; // traversal node
+// 	while(trav!=NULL) {
+// 		if( trav->data.x < minx)
+// 			minx = trav->data.x;
+// 		else if(trav->data.x > maxx)
+// 			maxx = trav->data.x;
+// 		if(trav->data.y < miny)
+// 			miny = trav->data.y;
+// 		else if(trav->data.y > maxy)
+// 			maxy = trav->data.y;
+// 		trav = trav->right; // next node
+// 	}
 
-	Rect2D r = {minx, miny, maxx, maxy};
-	return r;
-}
+// 	Rect2D r = {minx, miny, maxx, maxy};
+// 	return r;
+// }
 
-void PrintPolygon(const Polygon2D* p) {
-	LL_PrintForward(p->points);
-}
+// void PrintPolygon(const Polygon2D* p) {
+// 	LL_PrintForward(p->points);
+// }
 
 
-void AddVertex(Polygon2D * p, const Point2D* cord, const unsigned int position) {
-	LL_Insert(&p->points, *cord);
-}
+// void AddVertex(Polygon2D * p, const Point2D* cord, const unsigned int position) {
+// 	LL_InsertAtHead(p->points, *cord);
+// }
 
-void RemovePolygon(Polygon2D* p) {
-	LL_DeleteLL(p->points);
-}
+// void RemovePolygon(Polygon2D* p) {
+// 	LL_DeleteList(p->points);
+// }

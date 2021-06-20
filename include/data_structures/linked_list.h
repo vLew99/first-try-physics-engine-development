@@ -4,26 +4,50 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "types.h"
+#include <stddef.h>
 
 // linked list of type Vector2
 
-
-typedef struct Vec2_LL_node {
+typedef struct LLN_Vector2
+{
 	Vector2 data;
-	struct Vec2_LL_node* left;
-	struct Vec2_LL_node* right;
-} Vec2_LL_node;
+	struct LLN_Vector2* next;
+	struct LLN_Vector2* prev;
+} LLN_Vector2;
+
+
+typedef struct {
+	size_t count;
+	LLN_Vector2* head;
+	LLN_Vector2* tail;
+} LL_Vector2;
 
 
 
-void LL_PrintForward(const Vec2_LL_node* list);
-void LL_PrintBackward(const Vec2_LL_node* list); // why can't i pass this as a const
-void LL_Insert(Vec2_LL_node** list, const Vector2 item);
-void LL_Delete(Vec2_LL_node** list, const Vector2 item);
-void LL_DeleteLL(Vec2_LL_node* list);
-unsigned int LL_GetCount(const Vec2_LL_node* list);
-bool LL_IsEmpty(const Vec2_LL_node* list);
+// node create function
+LLN_Vector2* LL_CreateNode(const Vector2 item, LLN_Vector2* prev, LLN_Vector2* next);
 
+// query functions
+void LL_PrintForward(const LL_Vector2* list);
+void LL_PrintBackward(const LL_Vector2* list);
+Vector2* LL_Get(const LL_Vector2* list);
+
+
+// inserting nodes
+void LL_InsertAtHead(LL_Vector2* list, const Vector2 item);
+void LL_InsertAtTail(LL_Vector2* list, const Vector2 item);
+void LL_InsertAtIndex(LL_Vector2* list, const int pos);
+
+// deleting nodes
+void LL_DeleteHead(LL_Vector2* list);
+void LL_DeleteTail(LL_Vector2* list);
+void LL_DeleteNode(LL_Vector2* list, const Vector2 item);
+void LL_DeleteList(LL_Vector2* list);
+
+// helper functions
+Vector2* LL_ToArray(const LL_Vector2* list);
+int LL_GetCount(const LL_Vector2* list);
+bool LL_IsEmpty(const LL_Vector2* list);
 
 
 

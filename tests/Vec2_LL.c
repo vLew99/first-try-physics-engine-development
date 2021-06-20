@@ -5,70 +5,51 @@
 
 int main(int argc, char const *argv[])
 {
-	Vec2_LL_node* head = NULL;
-	LL_TraverseForw(head);
+	LL_Vector2 list = {0, NULL, NULL};
+	LL_PrintForward(&list);
 
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
-
-
-	LL_Insert(&head, (Vector2){1, 2});
-	LL_TraverseForw(head);
+	printf("Is empty: %d\n", LL_IsEmpty(&list));
+	printf("List Count: %ld\n", list.count);
 
 
+	LL_InsertAtHead(&list, (Vector2){1, 2});
+	LL_PrintForward(&list);
 
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
+	printf("Is empty: %d\n", LL_IsEmpty(&list));
+	printf("List Count: %ld\n", list.count);
 
 
-	LL_Insert(&head, (Vector2){2, 3});
-	LL_TraverseForw(head);
+	LL_InsertAtHead(&list, (Vector2){2, 3});
+	LL_PrintForward(&list);
 	
 	
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
+	printf("Is empty: %d\n", LL_IsEmpty(&list));
+	printf("List Count: %ld\n", list.count);
 
 
-	LL_Insert(&head, (Vector2){3, 4});
-	LL_TraverseForw(head);
-	
+	LL_InsertAtTail(&list, (Vector2){3, 4});
+	LL_PrintForward(&list);
 
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
-	
-
-	LL_Insert(&head, (Vector2){4, 5});
-	LL_TraverseForw(head);
+	printf("Is empty: %d\n", LL_IsEmpty(&list));
+	printf("List Count: %ld\n", list.count);
 
 	
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
+	LL_InsertAtTail(&list, (Vector2){4, 5});
+	LL_PrintForward(&list);
+
 	
-
-	LL_Delete(&head, (Vector2){3, 4});
-	LL_TraverseForw(head);
-
-
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
+	printf("Is empty: %d\n", LL_IsEmpty(&list));
+	printf("List Count: %ld\n", list.count);
 
 
-	LL_Delete(&head, (Vector2){1, 2});
-	LL_Delete(&head, (Vector2){4, 5});
-	LL_Delete(&head, (Vector2){2, 3});
+	Vector2* arr = LL_ToArray(&list);
+	int count = LL_GetCount(&list);
+	for(int i=0; i<count; i++) {
+		printf("(%f, %f)-> ", arr[i].x, arr[i].y);
+	}
+	printf("\n");
 
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
-
-
-	LL_Delete(&head, (Vector2){2, 3});
-
-
-	printf("Is empty: %d\n", LL_IsEmpty(head));
-	printf("List Count: %d\n", LL_GetCount(head));
-	
-	
-	LL_TraverseForw(head);
+	LL_PrintBackward(&list);
 
 	return 0;
 }

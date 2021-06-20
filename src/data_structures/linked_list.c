@@ -9,105 +9,224 @@
 
 
 
-void LL_PrintForward(const Vec2_LL_node* trav) {
-	while(trav != NULL) {
-		printf("(%p,(%f, %f),%p)->\n", trav->left, trav->data.x, trav->data.y, trav->right);
-		trav = trav->right;
+
+// Create a new node
+// sets value , prev , next
+LLN_Vector2* LL_CreateNode(const Vector2 item, LLN_Vector2* prev, LLN_Vector2* next) {
+	LLN_Vector2* newnode = malloc(sizeof(*newnode));
+	newnode->data = item;
+	newnode->next = next;
+	newnode->prev = prev;
+	return newnode;
+}
+
+
+
+
+/////////////////////
+// QUERY FUNCTIONS //
+/////////////////////
+
+/*
+		Print Linked List from front to back
+ */
+void LL_PrintForward(const LL_Vector2* list)
+{
+	LLN_Vector2* trav = list->head;
+	while (trav != NULL) {
+		printf("(%p,(%f, %f),%p)->\n", (void *)trav->prev, trav->data.x, trav->data.y, (void *)trav->next);
+		trav = trav->next;
 	}
 	printf("\n");
 }
 
-void LL_PrintBackward(const Vec2_LL_node* trav) {
-	while(trav != NULL) {
-		printf("(%p,(%f, %f),%p)->\n", trav->left, trav->data.x, trav->data.y, trav->right);
-		trav = trav->left;
+
+
+/*
+		Print Linked List from back to front
+ */
+void LL_PrintBackward(const LL_Vector2* list)
+{
+	LLN_Vector2* trav = list->tail;
+	while (trav != NULL) {
+		printf("(%p,(%f, %f),%p)->\n", (void *)trav->next, trav->data.x, trav->data.y, (void *)trav->prev);
+		trav = trav->prev;
 	}
 	printf("\n");
 }
 
 
 
-void LL_Insert(Vec2_LL_node** list, const Vector2 item) {
-	
-	// create new node
-	Vec2_LL_node* new = (Vec2_LL_node*) malloc(sizeof(*new));
-	
-	new->data = item;
-	new->right = NULL;
-	
-	// traverser
-	Vec2_LL_node* temp = *list;
-	
-	if(temp == NULL) {
 
-		// put data in new
-		new->left = NULL;
+////////////////////////////
+// INSERT / ADD FUNCTIONS //
+////////////////////////////
 
-		// change first node to new
-		*list = new;
+/*
+		Insert new node at head of Linked List
+ */
+void LL_InsertAtHead(LL_Vector2* list, const Vector2 item)
+{
 
-		return;
-	}
-	else {
+	LLN_Vector2* newnode = LL_CreateNode(item, NULL, list->head);
 
-		while(temp->right !=NULL) {
-			temp = temp->right;
-		}
-
-		temp->right = new;
-		new->left = temp;
-	
-	}
-}
-
-
-
-void LL_Delete(Vec2_LL_node** list, const Vector2 item) {
-	Vec2_LL_node* temp = *list;
-	while(temp!=NULL)
+	if (list->head != NULL)
 	{
-		if(temp->data.x == item.x && temp->data.y == item.y)
-		{
-
-			if(temp->left==NULL)
-				*list = temp->right;
-			else
-				(temp->left)->right = temp->right;
-
-
-			if(temp->right != NULL)
-				(temp->right)->left = temp->left;
-
-			free(temp);
-			break;
-
-		}
-		temp = temp->right;
+		(list->head)->prev = newnode;
 	}
+	else
+	{
+		list->tail = newnode;
+	}
+
+	list->head = newnode;
+	list->count++;
 }
 
 
-void LL_DeleteLL(Vec2_LL_node* list) {
-	Vec2_LL_node* trav = list; // traversal node
-	while(trav!= NULL) {
-		trav = list->right;
-		free(list);
-		list = trav;
+/*
+		Insert new node at tail of Linked List
+*/
+void LL_InsertAtTail(LL_Vector2* list, const Vector2 item)
+{
+	LLN_Vector2* newnode = LL_CreateNode(item, list->tail, NULL);
+
+	if (list->tail == NULL)
+	{
+		list->head = newnode;
 	}
+	else
+	{
+		list->tail->next = newnode;
+	}
+
+	list->tail = newnode;
+	list->count++;
+
+}
+
+void LL_InsertAtIndex(LL_Vector2* list, const int pos)
+{
+
 }
 
 
 
 
-unsigned int LL_GetCount(const Vec2_LL_node* list) {
-	unsigned int count = 0;
-	while(list!=NULL) {
-		list = list->right;
-		count++;
+
+
+
+//////////////////////
+// DELETE FUNCTIONS //
+//////////////////////
+
+/*
+		Delete the entire Linked List
+ */
+void LL_DeleteList(LL_Vector2* list)
+{
+	LLN_Vector2* trav = list->head;
+	LLN_Vector2* next;
+	while(trav!=NULL) {
+		next = trav->next;
+		free(trav);
+		trav = next;
 	}
-	return count;
+	list->count = 0;
 }
 
-bool LL_IsEmpty(const Vec2_LL_node* list) {
-	return list==NULL;
+
+/*
+		Delete Head from Linked List.
+ */
+void LL_DeleteHead(LL_Vector2* list)
+{
+	if(list->count == 0) // no node
+		return;
+	else if(list->count == 1) // a single node
+	{
+		free(list->head);
+		list->tail = NULL;
+	}
+	else // more than one node
+	{
+		LLN_Vector2* temp = list->head->next;
+		free(list->head);
+		list->head = temp;
+	}
+	list->count--;
+}
+
+
+/*
+		Delete Tail from Linked List.
+ */
+void LL_DeleteTail(LL_Vector2* list)
+{
+	if(list->count == 0)
+		return;
+	else if(list->count == 1)
+	{
+		free(list->tail);
+		list->head = NULL;
+	}
+	else
+	{
+		LLN_Vector2* temp = list->tail->prev;
+		temp->next = NULL;
+		free(list->tail);
+		list->tail = temp;
+
+	}
+	list->count--;
+}
+
+void LL_DeleteNode(LL_Vector2* list, const Vector2 item)
+{
+
+}
+
+
+
+
+
+/////////////////////
+// HELPER FUNCTION //
+/////////////////////
+
+/*
+		Checks if the Linked List is empty or not.
+ */
+bool LL_IsEmpty(const LL_Vector2* list)
+{
+	return list->count == 0;
+}
+
+
+/*
+		Returns  a pointer to an array containing all items in the Linked List.
+ */
+Vector2* LL_ToArray(const LL_Vector2* list)
+{
+	// create dynamically allocated array
+	Vector2* arr = malloc(sizeof(*arr)*(list->count));
+	
+	// traverse
+	LLN_Vector2* trav = list->head;
+	for(int i=0; trav!=NULL; i++)
+	{
+		arr[i] = trav->data;
+		trav = trav->next;
+	}
+
+	return arr;
+}
+
+
+/*
+		Returns the count of items in Linked List.
+ */
+int LL_GetCount(const LL_Vector2* list)
+{
+	return list->count;
 }

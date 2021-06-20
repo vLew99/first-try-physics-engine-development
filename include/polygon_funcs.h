@@ -7,7 +7,7 @@
 
 typedef struct {
 	unsigned int count;
-	Vec2_LL_node* points;
+	LL_Vector2 points;
 } Polygon2D;
 
 
