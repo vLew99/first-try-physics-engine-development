@@ -19,7 +19,8 @@ add_executable(
 	tests/loop.c
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE -g -Werror -Wpedantic)
+#target_compile_options(${PROJECT_NAME} PRIVATE -g -Werror -Wpedantic)
+target_compile_options(${PROJECT_NAME} PRIVATE -g -Werror)
 
 
 
