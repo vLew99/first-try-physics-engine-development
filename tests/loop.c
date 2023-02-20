@@ -32,7 +32,7 @@ int main(int argc, char const* argv[]) {
         CreateObject2D(10.0f, (Vector2){0, 0}, (Vector2){0.07, 0.07});
     AddForce(player, (Vector2){0.0f, 0.01});
     int x = 0;
-    while ( x++ < 100000) {
+    while (x++ < 5000) {
         system("clear");
         update(player);
         Draw(player->pos);

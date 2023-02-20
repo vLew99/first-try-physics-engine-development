@@ -93,7 +93,7 @@ void fun7() {
 void fun8() {
     Vector2 a = {1, 2};
     Vector2 b = {2, 1};
-    Vector2 *y = Add1(&a, &b);
+    Vector2* y = Add1(&a, &b);
 
     free(y);
 
@@ -140,12 +140,16 @@ int main() {
     fun7();
 
     int a = 50;
-    double value = *(double *)&a;
+    double value = *(double*)&a;
 
     printf("%d , %lf", a, value);
 
+    int y = 10;
+    int* z = &y;
+    printf("%p", z);
+
     struct Entity e = (Point2D){5, 8};
-    int *x = (unsigned int *)&e;
+    int* x = (unsigned int*)&e;
 
     printf("%p\n", x);
     printf("Sizeof struct Entity: %ld\n", sizeof(e));
@@ -166,7 +170,7 @@ int main() {
 
     printf("(%f, %f) - %f\n", temp.x, temp.y, cir.radius);
 
-    distance(e2);
+    /* distance(e2); */
 
     return 0;
 }
