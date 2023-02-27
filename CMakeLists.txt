@@ -18,7 +18,8 @@ add_executable(
 	# tests/Vec2_LL.c
 	# tests/polygon_test.c
 	# tests/dynamics_test.c
-    tests/loop.c
+    # tests/loop.c
+    tests/demo-sdl.c
 )
 
 #target_compile_options(${PROJECT_NAME} PRIVATE -g -Werror -Wpedantic)
@@ -34,4 +35,5 @@ target_include_directories(
 target_link_libraries(
 	${PROJECT_NAME}
 	m
+    SDL2
 )
