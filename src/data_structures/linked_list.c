@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "types.h"
+#include "vector_funcs.h"
 
 // Create a new node
 // sets value , prev , next
@@ -93,13 +94,21 @@ void LL_InsertAtIndex(LL_Vector2* list, const int pos) {}
                 Delete the entire Linked List
  */
 void LL_DeleteList(LL_Vector2* list) {
-    LLN_Vector2* trav = list->head;
-    LLN_Vector2* next;
-    while (trav != NULL) {
-        next = trav->next;
-        free(trav);
-        trav = next;
+    if (list->count == 0)
+        return;
+    else if (list->count == 1) {
+        free(list->head);
+    } else {
+        LLN_Vector2* trav = list->head;
+        LLN_Vector2* next;
+        while (trav != NULL) {
+            next = trav->next;
+            free(trav);
+            trav = next;
+        }
     }
+    list->head = NULL;
+    list->tail = NULL;
     list->count = 0;
 }
 
@@ -111,7 +120,7 @@ void LL_DeleteHead(LL_Vector2* list) {
         return;
     else if (list->count == 1)  // a single node
     {
-        free(list->head);
+        free(list->head);  // this should also be an error
         list->tail = NULL;
     } else  // more than one node
     {
@@ -140,7 +149,22 @@ void LL_DeleteTail(LL_Vector2* list) {
     list->count--;
 }
 
-void LL_DeleteNode(LL_Vector2* list, const Vector2 item) {}
+void LL_DeleteNode(LL_Vector2* list, const Vector2 item) {
+    if (list->head != NULL) {
+        LLN_Vector2* temp = list->head;
+        while (temp != NULL) {
+            if (EqualV2(&(temp->data), &item)) {
+                if (temp->next != NULL) (temp->next)->prev = temp->prev;
+                if (temp->prev != NULL) (temp->prev)->next = temp->next;
+                free(temp);
+                list->count--;
+                return;
+            } else {
+                temp = temp->next;
+            }
+        }
+    }
+}
 
 /////////////////////
 // HELPER FUNCTION //
