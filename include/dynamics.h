@@ -21,5 +21,11 @@ void DeleteObject2D(Object2D* obj);
 void AddForce(Object2D* object, const Vector2 force);
 void RemoveForce(Object2D* object, const Vector2 force);
 Vector2 TotalForce(const Object2D* object);
+void ApplyForces(Object2D* object);
+
+void AddImpulse(Object2D* object, const Vector2 force);
+void RemoveImpulses(Object2D* object);
+Vector2 TotalImpulse(const Object2D* object);
+void ApplyImpulses(Object2D* object);
 
 #endif  // DYNAMICS_HEADER
