@@ -13,7 +13,7 @@ real_t Dot(const Vector2*, const Vector2*);
 real_t Cross(const Vector2*, const Vector2*);  // need to look at this
 Vector2 Normalize(const Vector2*);
 
-bool equalV2(const Vector2*, const Vector2*);
-bool equalV3(const Vector3*, const Vector3*);
+bool EqualV2(const Vector2*, const Vector2*);
+bool EqualV3(const Vector3*, const Vector3*);
 
 #endif  // VECTOR_FUNCS

@@ -38,3 +38,11 @@ Vector2 Normalize(const Vector2* a) {
     real_t n = Norm(a);
     return (Vector2){a->x / n, a->y / n};
 }
+
+bool EqualV2(const Vector2* a, const Vector2* b) {
+    return (a->x == b->x && a->y == b->y);
+}
+
+bool EqualV3(const Vector3* a, const Vector3* b) {
+    return (a->x == b->x && a->y == b->y && a->z == b->z);
+}
