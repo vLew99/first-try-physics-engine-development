@@ -146,14 +146,14 @@ int main() {
 
     int y = 10;
     int* z = &y;
-    printf("%p", z);
+    printf("%p", (void*)z);
 
-    struct Entity e = (Point2D){5, 8};
-    int* x = (unsigned int*)&e;
+    Point2D e = (Point2D){5, 8};
+    uint* x = (unsigned int*)&e;
 
-    printf("%p\n", x);
+    printf("%p\n", (void*)x);
     printf("Sizeof struct Entity: %ld\n", sizeof(e));
-    printf("%p\n", (&e));
+    printf("%p\n", (void*)(&e));
 
     Vector2 e1 = {10, 20};
     printf("%f, %f\n", e1.x, e1.y);
