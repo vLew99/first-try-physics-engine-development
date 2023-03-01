@@ -23,8 +23,9 @@ LLN_Vector2* LL_CreateNode(const Vector2 item, LLN_Vector2* prev,
 /////////////////////
 
 /*
-                Print Linked List from front to back
+ * Print Linked List from front to back
  */
+
 void LL_PrintForward(const LL_Vector2* list) {
     LLN_Vector2* trav = list->head;
     while (trav != NULL) {
@@ -36,8 +37,9 @@ void LL_PrintForward(const LL_Vector2* list) {
 }
 
 /*
-                Print Linked List from back to front
+ * Linked List from back to front
  */
+
 void LL_PrintBackward(const LL_Vector2* list) {
     LLN_Vector2* trav = list->tail;
     while (trav != NULL) {
@@ -53,8 +55,9 @@ void LL_PrintBackward(const LL_Vector2* list) {
 ////////////////////////////
 
 /*
-                Insert new node at head of Linked List
+ * Insert new node at head of Linked List
  */
+
 void LL_InsertAtHead(LL_Vector2* list, const Vector2 item) {
     LLN_Vector2* newnode = LL_CreateNode(item, NULL, list->head);
 
@@ -69,8 +72,9 @@ void LL_InsertAtHead(LL_Vector2* list, const Vector2 item) {
 }
 
 /*
-                Insert new node at tail of Linked List
-*/
+ * Insert new node at tail of Linked List
+ */
+
 void LL_InsertAtTail(LL_Vector2* list, const Vector2 item) {
     LLN_Vector2* newnode = LL_CreateNode(item, list->tail, NULL);
 
@@ -84,15 +88,16 @@ void LL_InsertAtTail(LL_Vector2* list, const Vector2 item) {
     list->count++;
 }
 
-void LL_InsertAtIndex(LL_Vector2* list, const int pos) {}
+void LL_InsertAtIndex(LL_Vector2* list, const Vector2 item, const int pos) {}
 
 //////////////////////
 // DELETE FUNCTIONS //
 //////////////////////
 
 /*
-                Delete the entire Linked List
+ * Delete the entire Linked List
  */
+
 void LL_DeleteList(LL_Vector2* list) {
     if (list->count == 0)
         return;
@@ -113,8 +118,9 @@ void LL_DeleteList(LL_Vector2* list) {
 }
 
 /*
-                Delete Head from Linked List.
+ * Delete Head from Linked List.
  */
+
 void LL_DeleteHead(LL_Vector2* list) {
     if (list->count == 0)  // no node
         return;
@@ -132,8 +138,9 @@ void LL_DeleteHead(LL_Vector2* list) {
 }
 
 /*
-                Delete Tail from Linked List.
+ * Delete Tail from Linked List.
  */
+
 void LL_DeleteTail(LL_Vector2* list) {
     if (list->count == 0)
         return;
@@ -148,6 +155,10 @@ void LL_DeleteTail(LL_Vector2* list) {
     }
     list->count--;
 }
+
+/*
+ * Delete Item with value from list
+ */
 
 void LL_DeleteNode(LL_Vector2* list, const Vector2 item) {
     if (list->head != NULL) {
@@ -171,14 +182,15 @@ void LL_DeleteNode(LL_Vector2* list, const Vector2 item) {
 /////////////////////
 
 /*
-                Checks if the Linked List is empty or not.
+ * Checks if the Linked List is empty or not.
  */
+
 bool LL_IsEmpty(const LL_Vector2* list) { return list->count == 0; }
 
 /*
-                Returns  a pointer to an array containing all items in the
-   Linked List.
+ * Returns  a pointer to an array containing all items in the Linked List.
  */
+
 Vector2* LL_ToArray(const LL_Vector2* list) {
     // create dynamically allocated array
     Vector2* arr = malloc(sizeof(*arr) * (list->count));
@@ -194,6 +206,22 @@ Vector2* LL_ToArray(const LL_Vector2* list) {
 }
 
 /*
-                Returns the count of items in Linked List.
+ * Returns the count of items in Linked List.
  */
+
 int LL_GetCount(const LL_Vector2* list) { return list->count; }
+
+/*
+ * Returns a pointer to Linked List Node to the position given
+ */
+
+LLN_Vector2* LL_Get(const LL_Vector2* list, int position) {
+    LLN_Vector2* trav = list->head;
+    int curr_pos = 0;
+    while (trav != NULL) {
+        if (curr_pos++ == position) return trav;
+        trav = trav->next;
+    }
+    printf("List is empty. Cannot get position: %d\n", position);
+    exit(-1);
+}

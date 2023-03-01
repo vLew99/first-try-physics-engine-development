@@ -28,12 +28,12 @@ LLN_Vector2* LL_CreateNode(const Vector2 item, LLN_Vector2* prev,
 // query functions
 void LL_PrintForward(const LL_Vector2* list);
 void LL_PrintBackward(const LL_Vector2* list);
-Vector2* LL_Get(const LL_Vector2* list);
+LLN_Vector2* LL_Get(const LL_Vector2* list, int position);
 
 // inserting nodes
 void LL_InsertAtHead(LL_Vector2* list, const Vector2 item);
 void LL_InsertAtTail(LL_Vector2* list, const Vector2 item);
-void LL_InsertAtIndex(LL_Vector2* list, const int pos);
+void LL_InsertAtIndex(LL_Vector2* list, const Vector2 item, const int pos);
 
 // deleting nodes
 void LL_DeleteHead(LL_Vector2* list);
