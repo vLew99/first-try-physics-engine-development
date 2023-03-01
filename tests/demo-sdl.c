@@ -84,8 +84,8 @@ void onUpdate(Object2D* player, int8_t* user_input) {
     }
     if (user_input[2] == 1) {
         /* AddImpulse(player, (Vector2){0, -10}); */
-        /* player->vel.y = -10; */
-        AddImpulse(player, (Vector2){10, 0});
+        player->vel.y = -10;
+        /* AddImpulse(player, (Vector2){10, 0}); */
         /* AddForce(player, (Vector2){1, 0}); */
         user_input[2] = 0;
     }
