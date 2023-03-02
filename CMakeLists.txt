@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
-project(Collision LANGUAGES C)
+project(PhysicsEngine LANGUAGES C)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -13,8 +13,8 @@ include_directories( ${PROJECT_SOURCE_DIR}/include )
 link_libraries(m SDL2)
 
 add_executable(
-    ${PROJECT_NAME}
-    tests/main.c
+    SdlCollision
+    tests/demo-sdl.c
     ${SRCS}
     # tests/Vec2_LL.c
     # tests/polygon_test.c
@@ -23,7 +23,7 @@ add_executable(
     # tests/demo-sdl.c
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE -g -Werror -Wpedantic)
+target_compile_options(SdlCollision PRIVATE -g -Werror -Wpedantic)
 # target_compile_options(${PROJECT_NAME} PRIVATE -g -Werror)
 
 # for specific targets
@@ -33,14 +33,14 @@ target_compile_options(${PROJECT_NAME} PRIVATE -g -Werror -Wpedantic)
 # )
 # target_link_libraries( ${PROJECT_NAME} m SDL2)
 
-add_executable( linkedlisttest
-    tests/Vec2_LL.c
-    ${SRCS}
-)
-
+add_executable( linkedlisttest tests/Vec2_LL.c ${SRCS})
 target_link_libraries( linkedlisttest check m rt subunit )
+add_test( NAME test1 COMMAND linkedlisttest)
 
-add_test(
-    NAME test1
-    COMMAND linkedlisttest
-)
+add_executable( collisionstest tests/collisions_test.c ${SRCS})
+target_link_libraries( collisionstest check m rt subunit )
+add_test( NAME test2 COMMAND collisionstest)
+
+add_executable( vectorfuncstest tests/vectorfuncs_test.c ${SRCS})
+target_link_libraries( vectorfuncstest check m rt subunit )
+add_test( NAME test3 COMMAND vectorfuncstest)
