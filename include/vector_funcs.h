@@ -5,15 +5,26 @@
 
 #include "types.h"
 
-Vector2* Add1(const Vector2*, const Vector2*);
-Vector2 Add2(const Vector2*, const Vector2*);
-Vector2 Subtract(const Vector2*, const Vector2*);
-real_t Norm(const Vector2*);
-real_t Dot(const Vector2*, const Vector2*);
-real_t Cross(const Vector2*, const Vector2*);  // need to look at this
-Vector2 Normalize(const Vector2*);
+#define EqualV2(a, b) (a.x == b.x && a.y == b.y)
+#define EqualV3(a, b) (a.x == b.x && a.y == b.y && a.z == b.z)
 
-bool EqualV2(const Vector2*, const Vector2*);
-bool EqualV3(const Vector3*, const Vector3*);
+#define AddV2(a, b) \
+    (Vector2) { a.x + b.x, a.y + b.y }
+#define SubV2(a, b) \
+    (Vector2) { a.x - b.x, a.y - b.y }
+
+#if USE_DOUBLE
+#define LenV2(a) sqrt(a.x* a.x + a.y * a.y)
+#else
+#define LenV2(a) sqrtf(a.x* a.x + a.y * a.y)
+#endif
+
+#define NormV2(a) \
+    (Vector2) { a.x / LenV2(a), a.y / LenV2(a) }
+
+#define DotV2(a, b) a.x* b.x + a.y* b.y
+#define SqrMagV2(a, b) DotV2(a, b)
+
+#define CrossV2(a, b) (a.x * b.y - a.y * b.x)
 
 #endif  // VECTOR_FUNCS
