@@ -3,6 +3,7 @@
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_stdinc.h>
@@ -11,118 +12,110 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "dynamics.h"
-#include "types.h"
+#include "vector_funcs.h"
+
+#define TICKS_PER_SECOND 60
+#define SKIP_TICKS 1000 / TICKS_PER_SECOND
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
-#define OBJECT_WIDTH 10
-#define OBJECT_HEIGHT 10
+#define OBJECT_WIDTH 20
+#define OBJECT_HEIGHT 20
 #define USERINPUT_SIZE 3
 
-bool onInit(SDL_Window** wind, SDL_Renderer** rend) {
+#define HORIZONTAL_SPEED 1.0
+#define VERTICAL_SPEED 1.5
+
+#define GRAVITY 0.98
+
+typedef struct {
+    SDL_Renderer* rend;
+    SDL_Window* wind;
+    bool running;
+    bool* user_input;
+    SDL_Event e;
+    Object2D* player;
+} Game;
+
+bool onInit(Game* game) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         return false;
     }
-    if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, wind,
-                                    rend) != 0) {
+    if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &game->wind,
+                                    &game->rend) != 0) {
         return false;
     }
+    SDL_RenderSetVSync(game->rend, 1);
     return true;
 }
 
-bool initializePlayer(Object2D** player, int8_t** user_inputs) {
-    *(user_inputs) = (int8_t*)malloc(sizeof(int8_t) * USERINPUT_SIZE);
-    *(player) = CreateObject2D(10.0f, (Vector2){200, 400}, (Vector2){0, 0});
+bool initializePlayer(Game* game) {
+    game->user_input = (bool*)malloc(sizeof(bool) * USERINPUT_SIZE);
+    game->player = CreateObject2D(10.0f, (Vector2){200, 400}, (Vector2){0, 0});
 
-    // apply gravity
-    AddForce(*player, (Vector2){0, 0.98});
-
-    // impulse
-    AddImpulse(*player, (Vector2){0, -1});
+    AddForce(game->player, (Vector2){0, GRAVITY});
+    AddImpulse(game->player, (Vector2){10, -10});
     return true;
 }
 
-void onInput(Object2D* player, SDL_Event* event, int8_t* user_input,
-             bool* running) {
-    while (SDL_PollEvent(event)) {
+void onInput(Game* game) {
+    while (SDL_PollEvent(&game->e)) {
         const Uint8* keystates = SDL_GetKeyboardState(NULL);
-        if (event->type == SDL_QUIT) {
-            *running = false;
+        if (game->e.type == SDL_QUIT) {
+            game->running = false;
         }
-        if (keystates[SDL_SCANCODE_Q]) {
-            *running = false;
+        if (keystates[SDL_SCANCODE_Q] || keystates[SDL_SCANCODE_ESCAPE]) {
+            game->running = false;
         }
-
-        if (keystates[SDL_SCANCODE_SPACE]) {
-            user_input[2] = 1;
-        }
-        if (keystates[SDL_SCANCODE_A]) {
-            user_input[0] = -1;
-        } else if (keystates[SDL_SCANCODE_D]) {
-            user_input[0] = 1;
-        } else {
-            user_input[0] = 0;
-            user_input[1] = 0;
-        }
+        game->user_input[2] = keystates[SDL_SCANCODE_SPACE];
+        game->user_input[0] =
+            keystates[SDL_SCANCODE_A] || keystates[SDL_SCANCODE_LEFT];
+        game->user_input[1] =
+            keystates[SDL_SCANCODE_D] || keystates[SDL_SCANCODE_RIGHT];
     }
 }
 
-void onUpdate(Object2D* player, int8_t* user_input) {
+void onUpdate(Game* game, Uint32 dt) {
     // changing velocity for each input
-    switch (user_input[0]) {
-        case -1:
-            player->vel.x = -5;
-            break;
-        case 1:
-            player->vel.x = 5;
-            break;
-        case 0:
-            player->vel.x = 0;
-            break;
-    }
-    if (user_input[2] == 1) {
-        /* AddImpulse(player, (Vector2){0, -10}); */
-        player->vel.y = -10;
-        /* AddImpulse(player, (Vector2){10, 0}); */
-        /* AddForce(player, (Vector2){1, 0}); */
-        user_input[2] = 0;
+    // TODO: If a force is applied it does not stop because there is no gravity,
+    // that makes the object go on and on horizontally
+
+    ApplyForces(game->player);
+    ApplyImpulses(game->player);
+
+    int8_t user_vel =
+        (game->user_input[1] - game->user_input[0]) * HORIZONTAL_SPEED * dt;
+    /* printf("user_vel %d\n", user_vel); */
+
+    if (user_vel != 0) {
+        game->player->vel.x = user_vel;
     }
 
-    ApplyForces(player);
-    ApplyImpulses(player);
+    if (game->user_input[2]) {
+        game->player->vel.y = -VERTICAL_SPEED * dt;
+        game->user_input[2] = 0;
+    }
 
     // changes in velocity
 
     /* player->vel.x += userInput.x; */
     /* player->vel.y += userInput.y; */
 
-    if (player->pos.y + player->vel.y < 0) {
-        player->pos.y = 0;
-        player->vel.y = 0;
-    } else if (player->pos.y + player->vel.y >= 0) {
-        player->pos.y += player->vel.y;
-    }
-    if (player->pos.y + player->vel.y > WINDOW_HEIGHT - OBJECT_HEIGHT) {
-        player->pos.y = WINDOW_HEIGHT - OBJECT_HEIGHT;
-        player->vel.y *= -player->mass * 0.04;
-    } else if (player->pos.y + player->vel.y <= WINDOW_HEIGHT - OBJECT_HEIGHT) {
-        player->pos.y += player->vel.y;
+    Vector2 temp = AddV2(game->player->pos, game->player->vel);
+
+    if (temp.y < 0 || temp.y > WINDOW_HEIGHT - OBJECT_HEIGHT) {
+        game->player->vel.y *= -0.3;
+    } else {
+        game->player->pos.y = temp.y;
     }
 
-    if (player->pos.x + player->vel.x < 0) {
-        player->pos.x = 0;
-        player->vel.x = 0;
-    } else if (player->pos.x + player->vel.x >= 0) {
-        player->pos.x += player->vel.x;
-    }
-
-    if (player->pos.x + player->vel.x > WINDOW_WIDTH - OBJECT_WIDTH) {
-        player->pos.x = WINDOW_WIDTH - OBJECT_WIDTH;
-        player->vel.x = 0;
-    } else if (player->pos.x + player->vel.x <= WINDOW_WIDTH - OBJECT_WIDTH) {
-        player->pos.x += player->vel.x;
+    if (temp.x < 0 || temp.x > WINDOW_WIDTH - OBJECT_WIDTH) {
+        game->player->vel.x = 0;
+    } else {
+        game->player->pos.x = temp.x;
     }
 
     // change in position
@@ -141,50 +134,51 @@ void onCleanUp(SDL_Window* wind, SDL_Renderer* rend) {
     SDL_Quit();
 }
 
-void onRender(SDL_Renderer* rend, Object2D* player) {
+void onRender(Game* game) {
     // drawing the background
-    SDL_SetRenderDrawColor(rend, 0x11, 0x11, 0x11, 244);
-    SDL_RenderClear(rend);
+    SDL_SetRenderDrawColor(game->rend, 0x00, 0x00, 0x00, 255);
+    SDL_RenderClear(game->rend);
 
-    SDL_Delay(1000 / 100);
-
-    SDL_SetRenderDrawColor(rend, 0xff, 0xff, 0xff, 255);
+    SDL_SetRenderDrawColor(game->rend, 0xff, 0xff, 0xff, 255);
     SDL_FRect tempRect = (SDL_FRect){.h = OBJECT_HEIGHT,
                                      .w = OBJECT_WIDTH,
-                                     .x = player->pos.x,
-                                     .y = player->pos.y};
-    SDL_RenderFillRectF(rend, &tempRect);
+                                     .x = game->player->pos.x,
+                                     .y = game->player->pos.y};
+    SDL_RenderFillRectF(game->rend, &tempRect);
 
     // present everything at the last
-    SDL_RenderPresent(rend);
+    SDL_RenderPresent(game->rend);
 }
 
 int main(void) {
-    SDL_Window* wind;
-    SDL_Renderer* rend;
+    Game game = {.wind = NULL,
+                 .rend = NULL,
+                 .running = true,
+                 .user_input = NULL,
+                 .player = NULL};
 
-    Object2D* player;
-    int8_t* user_input;
-    SDL_Event e;
-
-    if (onInit(&wind, &rend) == false) exit(-1);
+    if (onInit(&game) == false) exit(-1);
 
     // as we want to change the value of the pointer (the address it points to)
     // when memory allocation is done, therefore we must pass pointer to
     // poiinter as function argument. Passing only one pointer can only change
     // the value of address this pointer points to
-    initializePlayer(&player, &user_input);
+    initializePlayer(&game);
 
-    bool running = true;
+    Uint32 last_frame_time = 0;
+    Uint32 curr_time, delta_time;
 
-    while (running) {
-        onInput(player, &e, user_input, &running);
-        onUpdate(player, user_input);
-        onRender(rend, player);
+    while (game.running) {
+        curr_time = SDL_GetTicks();
+        delta_time = curr_time - last_frame_time;
+        onInput(&game);
+        onUpdate(&game, delta_time);
+        onRender(&game);
+        last_frame_time = curr_time;
     }
 
-    free(user_input);
-    DeleteObject2D(player);
-    onCleanUp(wind, rend);
+    free(game.user_input);
+    DeleteObject2D(game.player);
+    onCleanUp(game.wind, game.rend);
     return 0;
 }

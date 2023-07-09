@@ -2,3 +2,4 @@ build
 .cache/
 .ccls-cache/
 scratch_files
+.nvimrc 
